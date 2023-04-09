@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 conexion = "mysql+pymysql://root@localhost/shop"
 app.config["SQLALCHEMY_DATABASE_URI"]= conexion
-app.config["UPLOAD_FOLDER"] = "../static/img"
+app.config["UPLOAD_FOLDER"] = './static/img'
 
 db = SQLAlchemy(app)
 

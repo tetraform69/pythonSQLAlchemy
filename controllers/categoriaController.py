@@ -21,9 +21,10 @@ def addCategoria():
         
     except exc.SQLAlchemyError as err:
         db.session.rollback()
+        categoria = None
         mensaje = str(err)
         
-    return render_template("formCategoria", mensaje = mensaje)
+    return render_template("formCategoria.html", categoria = categoria, mensaje = mensaje)
 
 @app.route("/listarCategoriasJson", methods=["get"])
 def listarCategorias():
