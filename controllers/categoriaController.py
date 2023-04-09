@@ -9,21 +9,6 @@ def formCategoria():
     categoria = None
     return render_template("formCategoria.html", categoria = categoria)
 
-@app.route("/listarCategorias")
-def listarCategorias():
-    
-    categorias = Categoria.query.all()
-    
-    json = []
-    
-    for c in categorias:
-        categoria = {
-            "idCat": c.idCat,
-            "nombreCat": c.nombreCat
-        }
-        json.append(categoria)
-    
-    return json
 
 @app.route("/addCategoria", methods=["post"])
 def addCategoria():
@@ -40,3 +25,32 @@ def addCategoria():
         
     return render_template("formCategoria", mensaje = mensaje)
 
+@app.route("/listarCategoriasJson", methods=["get"])
+def listarCategorias():
+    
+    categorias = Categoria.query.all()
+    
+    json = []
+    
+    for c in categorias:
+        categoria = {
+            "idCat": c.idCat,
+            "nombreCat": c.nombreCat
+        }
+        json.append(categoria)
+    
+    return json
+
+@app.route("/addCategoriaJson", methods = ["post"])
+def addCategoriaJson():
+    try:
+        datos = request.get_json()
+        categoria = Categoria(nombreCat = datos["nombreCat"])
+        db.session.add(categoria)
+        db.session.commit()
+        mensaje = "Categoria Agregada"
+    except exc.SQLAlchemyError as err:
+        db.session.rollback
+        mensaje = "Error al agregar"
+        
+    return {"mensaje": mensaje}
